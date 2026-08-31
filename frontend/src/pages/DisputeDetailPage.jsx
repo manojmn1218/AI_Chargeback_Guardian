@@ -30,6 +30,7 @@ import {
   Copy,
   Check,
   RefreshCw,
+  FileDown,
 } from 'lucide-react';
 import StatusBadge from '../components/StatusBadge';
 import CyberCard from '../components/CyberCard';
@@ -40,14 +41,15 @@ import AIResponsePanel from '../components/AIResponsePanel';
 import SHAPExplanationPanel from '../components/SHAPExplanationPanel';
 import HumanReviewPanel from '../components/HumanReviewPanel';
 import AuditTimelinePanel from '../components/AuditTimelinePanel';
-import { getDisputeInvestigation } from '../services/api';
+import { getDisputeInvestigation, getExportEvidencePacketUrl } from '../services/api';
 import { cyberSound } from '../utils/cyberSound';
-
-
+import { useAuth } from '../context/AuthContext';
 
 export default function DisputeDetailPage() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [investigationData, setInvestigationData] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('review'); // 'review' | 'ai_draft' | 'shap' | 'evidence' | 'timeline' | 'audit'
@@ -194,17 +196,33 @@ Pursuant to card network operating regulations, this transaction represents a fu
           </span>
         </div>
 
-        <button
-          onClick={() => {
-            cyberSound.playClick();
-            fetchInvestigation();
-          }}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white font-mono text-xs transition-colors"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>Refresh Dossier</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <a
+            href={getExportEvidencePacketUrl(id, user?.name || 'Alex Vance')}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => cyberSound.playSuccess()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 font-mono text-xs font-bold transition-all shadow-md shadow-indigo-600/10 cursor-pointer"
+            title="Download/Print Visa & Mastercard Formal Evidence Packet"
+          >
+            <FileDown className="w-3.5 h-3.5" />
+            <span>Export Packet (PDF)</span>
+          </a>
+
+          <button
+            type="button"
+            onClick={() => {
+              cyberSound.playClick();
+              fetchInvestigation();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white font-mono text-xs cursor-pointer transition-colors"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Refresh</span>
+          </button>
+        </div>
       </div>
+
 
       {/* 2. HEADER INFO BANNER */}
       <div

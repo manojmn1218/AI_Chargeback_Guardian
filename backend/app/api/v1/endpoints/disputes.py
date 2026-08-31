@@ -321,4 +321,50 @@ def get_dispute_audit_trail(dispute_ref_or_id: str, db: Session = Depends(get_db
         )
 
 
+from pydantic import BaseModel, Field
+
+class BatchReviewRequest(BaseModel):
+    dispute_ids: List[int]
+    decision: str = Field(default="APPROVE", description="APPROVE | REJECT | NEEDS_MORE_EVIDENCE")
+    reviewer_reference: str = Field(default="REV-00892")
+    notes: Optional[str] = "Batch triage processed via Command Deck"
+
+
+@router.post("/batch-review")
+def batch_review_disputes(
+    request: BatchReviewRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Execute batch triage authorization across multiple selected disputes.
+    """
+    from app.schemas.review import ReviewDecisionEnum
+    service = HumanReviewService(db)
+    results = []
+    
+    try:
+        enum_decision = ReviewDecisionEnum(request.decision)
+    except ValueError:
+        raise HTTPException(status_code=422, detail=f"Invalid decision: {request.decision}")
+
+    for dispute_id in request.dispute_ids:
+        try:
+            req = HumanReviewCreateRequest(
+                decision=enum_decision,
+                reviewer_reference=request.reviewer_reference,
+                reviewer_notes=request.notes,
+            )
+            res = service.submit_review(str(dispute_id), req)
+            results.append({"dispute_id": dispute_id, "status": "success", "decision": res.current_status})
+        except Exception as e:
+            results.append({"dispute_id": dispute_id, "status": "error", "error": str(e)})
+
+    return {
+        "processed_count": len(request.dispute_ids),
+        "successful_count": sum(1 for r in results if r["status"] == "success"),
+        "results": results,
+    }
+
+
+
 

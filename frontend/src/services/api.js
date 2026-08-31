@@ -93,7 +93,27 @@ export const getAnalyticsModel = async () => {
   return response.data;
 };
 
+export const getExportEvidencePacketUrl = (disputeId, reviewerName = 'Alex Vance') => {
+  return `/api/v1/export/${disputeId}/packet?reviewer=${encodeURIComponent(reviewerName)}`;
+};
+
+export const submitBatchReview = async (disputeIds, decision = 'APPROVE', reviewerReference = 'REV-00892', notes = '') => {
+  const response = await api.post('/disputes/batch-review', {
+    dispute_ids: disputeIds,
+    decision,
+    reviewer_reference: reviewerReference,
+    notes,
+  });
+  return response.data;
+};
+
+export const simulateStripeWebhook = async (payload = {}) => {
+  const response = await api.post('/webhooks/stripe', payload);
+  return response.data;
+};
+
 export default api;
+
 
 
 
