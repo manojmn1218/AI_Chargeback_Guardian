@@ -57,6 +57,7 @@ import {
 } from 'recharts';
 import StatusBadge from '../components/StatusBadge';
 import CyberCard from '../components/CyberCard';
+import AutoPilotModal from '../components/AutoPilotModal';
 import api, {
   getAnalyticsOverview,
   getAnalyticsTrends,
@@ -91,6 +92,8 @@ export default function DashboardPage() {
   const [batchLoading, setBatchLoading] = useState(false);
   const [batchNotification, setBatchNotification] = useState(null);
   const [webhookLoading, setWebhookLoading] = useState(false);
+  const [autoPilotOpen, setAutoPilotOpen] = useState(false);
+
 
   const fetchDashboardData = async () => {
     try {
@@ -276,8 +279,24 @@ export default function DashboardPage() {
           </p>
         </div>
 
+
         {/* Global Action Tools */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* Auto-Pilot SLA Triage Trigger */}
+          <button
+            type="button"
+            onClick={() => {
+              cyberSound.playClick();
+              setAutoPilotOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-white border border-amber-500/30 font-mono text-xs font-bold transition-all shadow-md shadow-amber-500/10 cursor-pointer"
+            title="Configure and run automated SLA risk rules"
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>Auto-Pilot SLA</span>
+          </button>
+
+
           {/* Live Stripe Ingest Simulator */}
           <button
             type="button"
@@ -303,6 +322,7 @@ export default function DashboardPage() {
             }}
             className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white font-mono text-xs transition-colors cursor-pointer"
           >
+
             <RefreshCw className="w-3.5 h-3.5" />
             <span>Sync</span>
           </button>
@@ -844,6 +864,19 @@ export default function DashboardPage() {
           </div>
         </div>
       </CyberCard>
+
+      {/* Auto-Pilot SLA Modal */}
+      {autoPilotOpen && (
+        <AutoPilotModal
+          onExecuted={() => {
+            setAutoPilotOpen(false);
+            fetchDashboardData();
+            fetchDisputes(page, activeFilter);
+          }}
+          onClose={() => setAutoPilotOpen(false)}
+        />
+      )}
     </div>
   );
 }
+

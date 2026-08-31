@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BarChart3,
   TrendingUp,
@@ -22,7 +22,9 @@ import {
   Clock,
   UserCheck,
   AlertTriangle,
+  Network,
 } from 'lucide-react';
+
 import {
   ResponsiveContainer,
   AreaChart,
@@ -39,8 +41,10 @@ import {
   CartesianGrid,
 } from 'recharts';
 import CyberCard from '../components/CyberCard';
+import FraudRingGraph from '../components/FraudRingGraph';
 import api, { getAnalyticsOverview, getAnalyticsTrends, getAnalyticsModel } from '../services/api';
 import { cyberSound } from '../utils/cyberSound';
+
 
 const PIE_COLORS = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
@@ -166,7 +170,7 @@ export default function AnalyticsPage() {
                 setActiveTab('trends');
                 cyberSound.playSelect();
               }}
-              className={`px-3.5 py-1.5 rounded-lg font-bold cursor-pointer transition-all ${
+              className={`px-3 py-1.5 rounded-lg font-bold cursor-pointer transition-all ${
                 activeTab === 'trends'
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
                   : 'text-slate-400 hover:text-slate-200'
@@ -180,17 +184,33 @@ export default function AnalyticsPage() {
                 setActiveTab('model');
                 cyberSound.playSelect();
               }}
-              className={`px-3.5 py-1.5 rounded-lg font-bold cursor-pointer transition-all ${
+              className={`px-3 py-1.5 rounded-lg font-bold cursor-pointer transition-all ${
                 activeTab === 'model'
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
-              ML Held-Out Benchmark
+              ML Benchmark
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('fraud_rings');
+                cyberSound.playSelect();
+              }}
+              className={`px-3 py-1.5 rounded-lg font-bold cursor-pointer transition-all flex items-center gap-1.5 ${
+                activeTab === 'fraud_rings'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Network className="w-3.5 h-3.5" />
+              <span>Fraud Ring Radar</span>
             </button>
           </div>
         </div>
       </div>
+
 
       {/* ========================================================================= */}
       {/* TAB 1: OPERATIONAL TRENDS & CHARTS */}
@@ -737,6 +757,14 @@ export default function AnalyticsPage() {
           </CyberCard>
         </div>
       )}
+
+      {/* TAB 3: FRAUD RING & SYNDICATE RADAR */}
+      {activeTab === 'fraud_rings' && (
+        <div className="space-y-6">
+          <FraudRingGraph />
+        </div>
+      )}
     </div>
   );
 }
+

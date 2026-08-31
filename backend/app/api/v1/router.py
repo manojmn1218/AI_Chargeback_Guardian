@@ -4,7 +4,21 @@ AI Chargeback Guardian — API v1 Router Aggregator
 
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import health, disputes, customers, merchants, transactions, ml, analytics, export, webhooks
+from app.api.v1.endpoints import (
+    health,
+    disputes,
+    customers,
+    merchants,
+    transactions,
+    ml,
+    analytics,
+    export,
+    webhooks,
+    ocr,
+    autopilot,
+    fraud_rings,
+    ai_chat,
+)
 
 api_router = APIRouter()
 
@@ -17,7 +31,12 @@ api_router.include_router(ml.router, prefix="/ml", tags=["Machine Learning"])
 api_router.include_router(analytics.router, prefix="/analytics", tags=["Analytics"])
 api_router.include_router(export.router, prefix="/export", tags=["Export & Documents"])
 api_router.include_router(webhooks.router, prefix="/webhooks", tags=["Gateway Webhooks"])
+api_router.include_router(ocr.router, prefix="/ocr", tags=["Multimodal OCR"])
+api_router.include_router(autopilot.router, prefix="/autopilot", tags=["Auto-Pilot SLA Rules"])
+api_router.include_router(fraud_rings.router, prefix="/fraud-rings", tags=["Fraud Ring Graph"])
+api_router.include_router(ai_chat.router, prefix="/ai-chat", tags=["Interactive AI Copilot"])
 
 router = api_router
+
 
 

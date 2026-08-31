@@ -31,6 +31,8 @@ import {
   Check,
   RefreshCw,
   FileDown,
+  Camera,
+  MessageSquare,
 } from 'lucide-react';
 import StatusBadge from '../components/StatusBadge';
 import CyberCard from '../components/CyberCard';
@@ -41,6 +43,8 @@ import AIResponsePanel from '../components/AIResponsePanel';
 import SHAPExplanationPanel from '../components/SHAPExplanationPanel';
 import HumanReviewPanel from '../components/HumanReviewPanel';
 import AuditTimelinePanel from '../components/AuditTimelinePanel';
+import OCREvidenceUploaderModal from '../components/OCREvidenceUploaderModal';
+import AIChatRefinerModal from '../components/AIChatRefinerModal';
 import { getDisputeInvestigation, getExportEvidencePacketUrl } from '../services/api';
 import { cyberSound } from '../utils/cyberSound';
 import { useAuth } from '../context/AuthContext';
@@ -49,6 +53,9 @@ export default function DisputeDetailPage() {
   const { id } = useParams();
   const { user } = useAuth();
   const [investigationData, setInvestigationData] = useState(null);
+  const [ocrModalOpen, setOcrModalOpen] = useState(false);
+  const [aiChatModalOpen, setAiChatModalOpen] = useState(false);
+
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -196,13 +203,41 @@ Pursuant to card network operating regulations, this transaction represents a fu
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* AI Refine Copilot Button */}
+          <button
+            type="button"
+            onClick={() => {
+              cyberSound.playClick();
+              setAiChatModalOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 font-mono text-xs font-bold transition-all shadow-md shadow-indigo-600/10 cursor-pointer"
+            title="Interactive prompt-based rebuttal rewriting"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>AI Copilot Refine</span>
+          </button>
+
+          {/* OCR Document Uploader */}
+          <button
+            type="button"
+            onClick={() => {
+              cyberSound.playClick();
+              setOcrModalOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600 text-cyan-300 hover:text-white border border-cyan-500/30 font-mono text-xs font-bold transition-all shadow-md shadow-cyan-600/10 cursor-pointer"
+            title="Ingest scanned waybills, delivery receipts & physical signatures"
+          >
+            <Camera className="w-3.5 h-3.5" />
+            <span>Upload OCR Proof</span>
+          </button>
+
           <a
             href={getExportEvidencePacketUrl(id, user?.name || 'Alex Vance')}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => cyberSound.playSuccess()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 font-mono text-xs font-bold transition-all shadow-md shadow-indigo-600/10 cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 font-mono text-xs font-bold transition-all cursor-pointer"
             title="Download/Print Visa & Mastercard Formal Evidence Packet"
           >
             <FileDown className="w-3.5 h-3.5" />
@@ -222,6 +257,7 @@ Pursuant to card network operating regulations, this transaction represents a fu
           </button>
         </div>
       </div>
+
 
 
       {/* 2. HEADER INFO BANNER */}
@@ -640,6 +676,32 @@ Pursuant to card network operating regulations, this transaction represents a fu
           </CyberCard>
         </div>
       </div>
+
+      {/* Multimodal OCR Document Uploader Modal */}
+      {ocrModalOpen && (
+        <OCREvidenceUploaderModal
+          disputeId={id}
+          onUploaded={() => {
+            setOcrModalOpen(false);
+            fetchInvestigation();
+          }}
+          onClose={() => setOcrModalOpen(false)}
+        />
+      )}
+
+      {/* Interactive AI Rebuttal Chat Copilot Modal */}
+      {aiChatModalOpen && (
+        <AIChatRefinerModal
+          disputeId={id}
+          currentDraft={investigationData?.ai_investigation_summary?.draft_rebuttal_preview || ''}
+          onApplied={(refinedText) => {
+            setEditedDraft(refinedText);
+            fetchInvestigation();
+          }}
+          onClose={() => setAiChatModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
+

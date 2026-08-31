@@ -112,7 +112,39 @@ export const simulateStripeWebhook = async (payload = {}) => {
   return response.data;
 };
 
+export const uploadOCREvidence = async (disputeId, payload) => {
+  const response = await api.post(`/ocr/${disputeId}/upload-ocr`, payload);
+  return response.data;
+};
+
+export const getAutoPilotRules = async () => {
+  const response = await api.get('/autopilot/rules');
+  return response.data;
+};
+
+export const runAutoPilot = async (maxBatch = 10, reviewerId = 'AUTOPILOT_AI_SUPERVISOR') => {
+  const response = await api.post('/autopilot/run', {
+    max_batch: maxBatch,
+    reviewer_id: reviewerId,
+  });
+  return response.data;
+};
+
+export const getFraudRingGraph = async () => {
+  const response = await api.get('/fraud-rings/graph');
+  return response.data;
+};
+
+export const refineRebuttal = async (disputeId, userInstruction, currentRebuttal = null) => {
+  const response = await api.post(`/ai-chat/${disputeId}/refine`, {
+    user_instruction: userInstruction,
+    current_rebuttal: currentRebuttal,
+  });
+  return response.data;
+};
+
 export default api;
+
 
 
 
