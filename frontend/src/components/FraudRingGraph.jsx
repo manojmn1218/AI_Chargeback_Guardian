@@ -108,9 +108,9 @@ export default function FraudRingGraph() {
                 });
               }}
             >
-              <circle r="26" fill="#ef4444" fillOpacity="0.15" stroke="#ef4444" strokeWidth="2" />
-              <circle r="14" fill="#ef4444" />
-              <text y="35" textAnchor="middle" fill="#fca5a5" fontSize="10" fontWeight="bold">
+              <circle r="28" fill="#ef4444" fillOpacity="0.25" stroke="#ef4444" strokeWidth="2.5" />
+              <circle r="15" fill="#ef4444" />
+              <text y="38" textAnchor="middle" fill="#fca5a5" fontSize="11" fontWeight="bold" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}>
                 Device Syndicate #01
               </text>
             </g>
@@ -136,19 +136,20 @@ export default function FraudRingGraph() {
                   }}
                 >
                   <circle
-                    r="16"
+                    r="18"
                     fill={isSelected ? '#06b6d4' : '#6366f1'}
-                    fillOpacity="0.2"
-                    stroke={isSelected ? '#22d3ee' : '#818cf8'}
-                    strokeWidth="1.5"
+                    fillOpacity="0.3"
+                    stroke={isSelected ? '#22d3ee' : '#a5b4fc'}
+                    strokeWidth="2"
                   />
-                  <circle r="8" fill={isSelected ? '#06b6d4' : '#6366f1'} />
-                  <text y="24" textAnchor="middle" fill="#cbd5e1" fontSize="9">
+                  <circle r="9" fill={isSelected ? '#22d3ee' : '#818cf8'} />
+                  <text y="26" textAnchor="middle" fill="#38bdf8" fontSize="11" fontWeight="bold" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.9)' }}>
                     {node.label}
                   </text>
                 </g>
               );
             })}
+
           </svg>
         )}
 

@@ -267,11 +267,11 @@ export default function AnalyticsPage() {
             <CyberCard noPadding className="h-[320px] flex flex-col justify-between">
               <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                    <TrendingUp className="w-3.5 h-3.5 text-indigo-400" />
-                    1. Dispute Filing Volume Over Time
+                  <h3 className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-2">
+                    <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>1. Dispute Filing Volume Over Time</span>
                   </h3>
-                  <p className="text-[10px] font-mono text-slate-500">
+                  <p className="text-[11px] font-mono text-slate-300 font-medium mt-0.5">
                     Monthly synthetic dispute ingestion count
                   </p>
                 </div>
@@ -283,26 +283,27 @@ export default function AnalyticsPage() {
                     <AreaChart data={trends.disputes_over_time} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                       <defs>
                         <linearGradient id="disputeAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
+                          <stop offset="5%" stopColor="#6366f1" stopOpacity={0.5} />
                           <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                      <XAxis dataKey="period" stroke="#64748b" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="#64748b" tick={{ fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                      <XAxis dataKey="period" stroke="#94a3b8" tick={{ fontSize: 10, fill: '#38bdf8', fontWeight: 'bold' }} />
+                      <YAxis stroke="#94a3b8" tick={{ fontSize: 10, fill: '#a5b4fc', fontWeight: 'bold' }} />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: '#0f172a',
-                          borderColor: '#334155',
-                          borderRadius: '12px',
+                          backgroundColor: '#030712',
+                          borderColor: '#38bdf8',
+                          borderRadius: '10px',
                           fontSize: '11px',
+                          color: '#f8fafc',
                         }}
                       />
-                      <Area type="monotone" dataKey="count" stroke="#818cf8" strokeWidth={2} fill="url(#disputeAreaGrad)" />
+                      <Area type="monotone" dataKey="count" stroke="#818cf8" strokeWidth={2.5} fill="url(#disputeAreaGrad)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="h-full flex items-center justify-center text-slate-500 font-mono text-xs">
+                  <div className="h-full flex items-center justify-center text-slate-400 font-mono text-xs">
                     No time-series data available
                   </div>
                 )}
@@ -313,11 +314,11 @@ export default function AnalyticsPage() {
             <CyberCard noPadding className="h-[320px] flex flex-col justify-between">
               <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-2">
                     <Activity className="w-3.5 h-3.5 text-cyan-400" />
-                    2. Case Strength / Risk Score Distribution
+                    <span>2. Case Strength / Risk Score Distribution</span>
                   </h3>
-                  <p className="text-[10px] font-mono text-slate-500">
+                  <p className="text-[11px] font-mono text-slate-300 font-medium mt-0.5">
                     Dispute count across 5 normalized score brackets (0 to 100)
                   </p>
                 </div>
@@ -327,22 +328,23 @@ export default function AnalyticsPage() {
                 {trends?.risk_distribution?.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={trends.risk_distribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                      <XAxis dataKey="range" stroke="#64748b" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="#64748b" tick={{ fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                      <XAxis dataKey="range" stroke="#94a3b8" tick={{ fontSize: 10, fill: '#38bdf8', fontWeight: 'bold' }} />
+                      <YAxis stroke="#94a3b8" tick={{ fontSize: 10, fill: '#a5b4fc', fontWeight: 'bold' }} />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: '#0f172a',
-                          borderColor: '#334155',
-                          borderRadius: '12px',
+                          backgroundColor: '#030712',
+                          borderColor: '#38bdf8',
+                          borderRadius: '10px',
                           fontSize: '11px',
+                          color: '#f8fafc',
                         }}
                       />
                       <Bar dataKey="count" fill="#38bdf8" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="h-full flex items-center justify-center text-slate-500 font-mono text-xs">
+                  <div className="h-full flex items-center justify-center text-slate-400 font-mono text-xs">
                     No risk score data available
                   </div>
                 )}
@@ -353,11 +355,11 @@ export default function AnalyticsPage() {
             <CyberCard noPadding className="h-[320px] flex flex-col justify-between">
               <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-xs font-mono font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-2">
                     <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                    3. Evidence Completeness Distribution
+                    <span>3. Evidence Completeness Distribution</span>
                   </h3>
-                  <p className="text-[10px] font-mono text-slate-500">
+                  <p className="text-[11px] font-mono text-slate-300 font-medium mt-0.5">
                     Proportion of disputes categorized by verified evidence availability
                   </p>
                 </div>
@@ -367,22 +369,23 @@ export default function AnalyticsPage() {
                 {trends?.evidence_completeness_distribution?.length > 0 ? (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={trends.evidence_completeness_distribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                      <XAxis dataKey="range" stroke="#64748b" tick={{ fontSize: 10 }} />
-                      <YAxis stroke="#64748b" tick={{ fontSize: 10 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                      <XAxis dataKey="range" stroke="#94a3b8" tick={{ fontSize: 10, fill: '#34d399', fontWeight: 'bold' }} />
+                      <YAxis stroke="#94a3b8" tick={{ fontSize: 10, fill: '#a5b4fc', fontWeight: 'bold' }} />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: '#0f172a',
-                          borderColor: '#334155',
-                          borderRadius: '12px',
+                          backgroundColor: '#030712',
+                          borderColor: '#34d399',
+                          borderRadius: '10px',
                           fontSize: '11px',
+                          color: '#f8fafc',
                         }}
                       />
-                      <Bar dataKey="count" fill="#4ade80" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="count" fill="#34d399" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <div className="h-full flex items-center justify-center text-slate-500 font-mono text-xs">
+                  <div className="h-full flex items-center justify-center text-slate-400 font-mono text-xs">
                     No evidence completeness data available
                   </div>
                 )}
@@ -393,11 +396,11 @@ export default function AnalyticsPage() {
             <CyberCard noPadding className="h-[320px] flex flex-col justify-between">
               <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                  <h3 className="text-xs font-mono font-bold text-purple-300 uppercase tracking-wider flex items-center gap-2">
                     <UserCheck className="w-3.5 h-3.5 text-purple-400" />
-                    4. Human Review & AI Decisions
+                    <span>4. Human Review & AI Decisions</span>
                   </h3>
-                  <p className="text-[10px] font-mono text-slate-500">
+                  <p className="text-[11px] font-mono text-slate-300 font-medium mt-0.5">
                     Breakdown of human review authorized decisions vs AI draft recommendations
                   </p>
                 </div>
@@ -418,15 +421,16 @@ export default function AnalyticsPage() {
                           dataKey="value"
                         >
                           {trends.ai_recommendations.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="#0f172a" strokeWidth={2} />
                           ))}
                         </Pie>
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: '#0f172a',
-                            borderColor: '#334155',
-                            borderRadius: '12px',
+                            backgroundColor: '#030712',
+                            borderColor: '#818cf8',
+                            borderRadius: '10px',
                             fontSize: '11px',
+                            color: '#f8fafc',
                           }}
                         />
                       </PieChart>
@@ -436,18 +440,19 @@ export default function AnalyticsPage() {
 
                 <div className="space-y-1.5 font-mono text-xs">
                   {trends?.ai_recommendations?.map((item, idx) => (
-                    <div key={item.name} className="flex items-center justify-between p-1 rounded bg-slate-900/60 border border-slate-800/60 text-[10px]">
+                    <div key={item.name} className="flex items-center justify-between p-1.5 rounded bg-slate-900/80 border border-slate-800 text-[10px]">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }} />
-                        <span className="text-slate-300 font-bold">{item.name}</span>
+                        <span className="text-slate-200 font-bold">{item.name}</span>
                       </div>
-                      <span className="text-slate-400">{item.value}</span>
+                      <span className="text-cyan-300 font-bold">{item.value}</span>
                     </div>
                   ))}
-                  <div className="pt-1.5 border-t border-slate-800 text-[10px] text-slate-500">
-                    Approved Decisions: <strong className="text-emerald-400">{overview?.approved ?? 0}</strong>
+                  <div className="pt-1.5 border-t border-slate-800 text-[10px] text-slate-400">
+                    Approved Decisions: <strong className="text-emerald-400 font-bold">{overview?.approved ?? 0}</strong>
                   </div>
                 </div>
+
               </div>
             </CyberCard>
           </div>

@@ -443,15 +443,15 @@ export default function DashboardPage() {
         <CyberCard className="lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                <TrendingUp className="w-3.5 h-3.5 text-indigo-400" />
-                Dispute Ingestion & Contest Velocity (30 Days)
+              <h2 className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-2">
+                <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Dispute Ingestion & Contest Velocity (30 Days)</span>
               </h2>
-              <p className="text-[10px] font-mono text-slate-500">
+              <p className="text-[11px] font-mono text-slate-300 font-medium mt-0.5">
                 Daily incoming chargeback volume vs AI contest recommendations
               </p>
             </div>
-            <span className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
+            <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/15 px-2.5 py-1 rounded border border-cyan-500/30">
               STREAM SYNCHRONIZED
             </span>
           </div>
@@ -479,44 +479,48 @@ export default function DashboardPage() {
                   <AreaChart data={timeSeriesData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorTotal" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
+                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.5} />
                         <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
                       </linearGradient>
                       <linearGradient id="colorContest" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
+                        <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.5} />
                         <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                    <XAxis dataKey="date" stroke="#64748b" tick={{ fontSize: 9 }} />
-                    <YAxis stroke="#64748b" tick={{ fontSize: 9 }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis dataKey="date" stroke="#94a3b8" tick={{ fontSize: 10, fill: '#38bdf8', fontWeight: 'bold' }} />
+                    <YAxis stroke="#94a3b8" tick={{ fontSize: 10, fill: '#a5b4fc', fontWeight: 'bold' }} />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#090d1e',
-                        border: '1px solid rgba(99, 102, 241, 0.3)',
-                        borderRadius: '8px',
+                        backgroundColor: '#030712',
+                        border: '1px solid rgba(56, 189, 248, 0.5)',
+                        borderRadius: '10px',
                         fontFamily: 'monospace',
                         fontSize: '11px',
+                        color: '#f8fafc',
+                        boxShadow: '0 10px 25px rgba(0,0,0,0.8)',
                       }}
+                      labelStyle={{ color: '#38bdf8', fontWeight: 'bold' }}
+                      itemStyle={{ color: '#e2e8f0', fontWeight: 'bold' }}
                     />
-                    <Legend wrapperStyle={{ fontSize: '10px' }} />
+                    <Legend wrapperStyle={{ fontSize: '11px', color: '#f8fafc', fontWeight: 'bold' }} />
                     <Area
                       type="monotone"
                       dataKey="total"
                       name="Incoming Disputes"
-                      stroke="#6366f1"
+                      stroke="#818cf8"
                       fillOpacity={1}
                       fill="url(#colorTotal)"
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                     />
                     <Area
                       type="monotone"
                       dataKey="contested"
                       name="Contest Recommended (τ ≥ 0.60)"
-                      stroke="#06b6d4"
+                      stroke="#22d3ee"
                       fillOpacity={1}
                       fill="url(#colorContest)"
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -529,11 +533,11 @@ export default function DashboardPage() {
         <CyberCard>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+              <h2 className="text-xs font-mono font-bold text-cyan-300 uppercase tracking-wider flex items-center gap-2">
                 <PieIcon className="w-3.5 h-3.5 text-cyan-400" />
-                Dispute Reason Categories
+                <span>Dispute Reason Categories</span>
               </h2>
-              <p className="text-[10px] font-mono text-slate-500">Portfolio reason code breakdown</p>
+              <p className="text-[11px] font-mono text-slate-300 font-medium mt-0.5">Portfolio reason code breakdown</p>
             </div>
           </div>
 
@@ -557,25 +561,32 @@ export default function DashboardPage() {
                       data={reasonData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={50}
-                      outerRadius={75}
+                      innerRadius={48}
+                      outerRadius={74}
                       paddingAngle={3}
                       dataKey="value"
                     >
                       {reasonData.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                        <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="#0f172a" strokeWidth={2} />
                       ))}
                     </Pie>
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#090d1e',
-                        border: '1px solid rgba(99, 102, 241, 0.3)',
-                        borderRadius: '8px',
+                        backgroundColor: '#030712',
+                        border: '1px solid rgba(56, 189, 248, 0.5)',
+                        borderRadius: '10px',
                         fontFamily: 'monospace',
                         fontSize: '11px',
+                        color: '#f8fafc',
+                        boxShadow: '0 10px 25px rgba(0,0,0,0.8)',
                       }}
+                      labelStyle={{ color: '#38bdf8', fontWeight: 'bold' }}
+                      itemStyle={{ color: '#e2e8f0', fontWeight: 'bold' }}
                     />
-                    <Legend wrapperStyle={{ fontSize: '9px' }} />
+                    <Legend
+                      wrapperStyle={{ fontSize: '10px', color: '#f1f5f9', fontWeight: 'bold' }}
+                      formatter={(val) => <span style={{ color: '#e2e8f0', fontWeight: '600' }}>{val}</span>}
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               );
@@ -583,6 +594,7 @@ export default function DashboardPage() {
           </div>
         </CyberCard>
       </div>
+
 
 
       {/* 4. DISPUTE INVESTIGATION TABLE (PART 3 + UPGRADES) */}
