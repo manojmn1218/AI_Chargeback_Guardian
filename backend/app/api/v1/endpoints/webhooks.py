@@ -3,6 +3,7 @@ AI Chargeback Guardian — Payment Gateway & E-Commerce Webhook Ingestion
 """
 
 import json
+import random
 from typing import Optional
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Body
@@ -48,11 +49,13 @@ def ingest_stripe_dispute_webhook(
         }
         dispute_reason = reason_map.get(payload.reason.lower(), "GOODS_NOT_RECEIVED")
 
-        ts_int = int(now.timestamp())
+        # Use microsecond-precision timestamp + random suffix for guaranteed uniqueness
+        # across rapid successive webhook calls within the same second
+        unique_suffix = f"{int(now.timestamp() * 1000000) % 10000000000}-{random.randint(1000, 9999)}"
 
         # 1. Create synthetic customer
         customer = Customer(
-            customer_reference=f"CUST-STRIPE-{ts_int % 100000}",
+            customer_reference=f"CUST-STRIPE-{unique_suffix}",
             account_age_days=180,
             previous_successful_transactions=6,
             previous_disputes=0,
@@ -64,7 +67,7 @@ def ingest_stripe_dispute_webhook(
 
         # 2. Create synthetic transaction
         tx = Transaction(
-            transaction_reference=f"TXN-STRIPE-{ts_int % 100000}",
+            transaction_reference=f"TXN-STRIPE-{unique_suffix}",
             customer_id=customer.id,
             merchant_id=payload.merchant_id or 1,
             amount=payload.amount,
@@ -82,7 +85,7 @@ def ingest_stripe_dispute_webhook(
 
         # 3. Create synthetic order
         order = Order(
-            order_reference=f"ORD-STRIPE-{ts_int % 100000}",
+            order_reference=f"ORD-STRIPE-{unique_suffix}",
             transaction_id=tx.id,
             order_value=payload.amount,
             product_category="ELECTRONICS",
@@ -106,7 +109,7 @@ def ingest_stripe_dispute_webhook(
         db.flush()
 
         # 5. Create dispute record
-        dispute_ref = f"DISP-STRIPE-{ts_int % 100000}"
+        dispute_ref = f"DISP-STRIPE-{unique_suffix}"
         dispute = Dispute(
             dispute_reference=dispute_ref,
             transaction_id=tx.id,
